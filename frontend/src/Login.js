@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const Login = () => {
+const Login = ({ setToken }) => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -14,29 +14,21 @@ const Login = () => {
       : 'http://localhost:8000/api/login/';
 
     try {
-      const response = await axios.post(url, { username, password });
-
+      const response = await axios.post(url, {
+        username,
+        password
+      });
       if (isRegistering) {
-  setMessage('✅ Registro exitoso. Ahora puedes iniciar sesión.');
-} else {
-  const { access, refresh } = response.data;
+        setMessage('Registro exitoso. Ahora puedes iniciar sesión.');
+      } else {
+        setMessage('Inicio de sesión exitoso.');
+        setToken(response.data.access);
 
-   console.log('🧾 access:', access);
-  console.log('🔄 refresh:', refresh);
-
-
-  localStorage.setItem('access_token', access);
-  localStorage.setItem('refresh_token', refresh);
-
-  setMessage('🎉 Inicio de sesión exitoso.');
-  console.log('Token de acceso:', access);
-}
-
+      }
     } catch (error) {
-      setMessage('❌ Hubo un error. Verifica tus datos.');
+      setMessage('Hubo un error. Verifica tus datos.');
     }
   };
-
   return (
     <div>
       <h1 className="cecyflix-logo">CECYFLIX</h1>
@@ -71,5 +63,4 @@ const Login = () => {
     </div>
   );
 };
-
 export default Login;
