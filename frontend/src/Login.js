@@ -17,11 +17,21 @@ const Login = () => {
       const response = await axios.post(url, { username, password });
 
       if (isRegistering) {
-        setMessage('✅ Registro exitoso. Ahora puedes iniciar sesión.');
-      } else {
-        setMessage('🎉 Inicio de sesión exitoso.');
-        console.log('Token recibido:', response.data);
-      }
+  setMessage('✅ Registro exitoso. Ahora puedes iniciar sesión.');
+} else {
+  const { access, refresh } = response.data;
+
+   console.log('🧾 access:', access);
+  console.log('🔄 refresh:', refresh);
+
+
+  localStorage.setItem('access_token', access);
+  localStorage.setItem('refresh_token', refresh);
+
+  setMessage('🎉 Inicio de sesión exitoso.');
+  console.log('Token de acceso:', access);
+}
+
     } catch (error) {
       setMessage('❌ Hubo un error. Verifica tus datos.');
     }
